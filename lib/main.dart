@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: Color.fromRGBO(241, 239, 228, 1),
       ),
       debugShowCheckedModeBanner: false,
       home: FutureBuilder(
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
         builder: (context, prefs) {
           if (prefs.connectionState == ConnectionState.done) {
             if (SharedPrefsController.user?.userId != null) {
-              // Provider.of<User>(context).setProvider(prefs.data);
               return ChangeNotifierProvider.value(
                 value: SharedPrefsController.user,
                 child: HomeScreen(),

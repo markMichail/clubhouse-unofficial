@@ -28,8 +28,6 @@ const String SENTRY_KEY =
 const String INSTABUG_KEY = "4e53155da9b00728caa5249f2e35d6b3";
 const String AMPLITUDE_KEY = "9098a21a950e7cb0933fb5b30affe5be";
 
-// final String API_DEVICE_ID = ;
-
 String utf8convert(String text) {
   List<int> bytes = text.toString().codeUnits;
   return utf8.decode(bytes);
@@ -51,9 +49,8 @@ showLoadingDialog(BuildContext context) {
   );
 }
 
-headers({@required bool isAuth, BuildContext context}) {
+headers({@required bool isAuth}) {
   if (isAuth) {
-    var user = Provider.of<User>(context);
     return {
       'CH-Languages': 'en-US',
       'CH-Locale': 'en_US',
@@ -62,8 +59,8 @@ headers({@required bool isAuth, BuildContext context}) {
       'CH-AppVersion': API_BUILD_VERSION,
       'User-Agent': API_UA,
       'CH-DeviceId': SharedPrefsController.deviceID,
-      'Authorization': 'Token ' + user.authToken,
-      'CH-UserID': user.userId.toString(),
+      'Authorization': 'Token ' + SharedPrefsController.user.authToken,
+      'CH-UserID': SharedPrefsController.user.userId.toString(),
     };
   } else {
     return {
