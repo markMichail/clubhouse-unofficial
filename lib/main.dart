@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:club_house_unofficial/api/models/User.dart';
+import 'package:club_house_unofficial/api/sharedPrefsController.dart';
 import 'package:club_house_unofficial/screens/confirm_code_screen.dart';
 import 'package:club_house_unofficial/screens/home_screen.dart';
 import 'package:club_house_unofficial/screens/login_screen.dart';
@@ -27,17 +29,15 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         // initialRoute: WelcomeScreen.routeName,
         home: FutureBuilder(
-          future: SharedPreferences.getInstance(),
+          future: SharedPrefsController.load(),
           builder: (context, prefs) {
-            if (prefs.hasData) {
-              if (prefs.data.getString('user') != null) {
-                Provider.of<User>(context)
-                    .setProvider(jsonDecode(prefs.data.getString('user')));
+            if (prefs.connectionState == ConnectionState.done) {
+              if (SharedPrefsController.user.userId != null)
                 return HomeScreen();
-              } else
+              else
                 return WelcomeScreen();
             }
-            return CircularProgressIndicator();
+            return Scaffold(body: Center(child: CircularProgressIndicator()));
           },
         ),
         routes: {

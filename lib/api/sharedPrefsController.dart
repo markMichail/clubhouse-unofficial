@@ -8,7 +8,7 @@ class SharedPrefsController {
   static User user;
   static String deviceID = Uuid().v4().toString().toUpperCase();
 
-  static void load() async {
+  static Future<void> load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userJson = prefs.getString("user");
     user = User.fromJson(json: jsonDecode(userJson));
@@ -29,6 +29,6 @@ class SharedPrefsController {
   }
 
   static bool isLoggedIn() {
-    return user.userId != null;
+    return user?.userId != null;
   }
 }
