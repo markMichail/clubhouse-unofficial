@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:club_house_unofficial/api/models/User.dart';
+import 'package:club_house_unofficial/api/sharedPrefsController.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+import 'package:provider/provider.dart';
 
 const String TAG = "ClubhouseAPI";
 const bool DEBUG = true;
@@ -26,7 +28,7 @@ const String SENTRY_KEY =
 const String INSTABUG_KEY = "4e53155da9b00728caa5249f2e35d6b3";
 const String AMPLITUDE_KEY = "9098a21a950e7cb0933fb5b30affe5be";
 
-final String API_DEVICE_ID = Uuid().v4().toString().toUpperCase();
+// final String API_DEVICE_ID = ;
 
 String utf8convert(String text) {
   List<int> bytes = text.toString().codeUnits;
@@ -47,4 +49,31 @@ showLoadingDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) => alert,
   );
+}
+
+headers({@required bool isAuth, BuildContext context}) {
+  if (isAuth) {
+    var user = Provider.of<User>(context);
+    return {
+      'CH-Languages': 'en-US',
+      'CH-Locale': 'en_US',
+      'Accept': 'application/json',
+      'CH-AppBuild': API_BUILD_ID,
+      'CH-AppVersion': API_BUILD_VERSION,
+      'User-Agent': API_UA,
+      'CH-DeviceId': SharedPrefsController.deviceID,
+      'Authorization': 'Token ' + user.authToken,
+      'CH-UserID': user.userId.toString(),
+    };
+  } else {
+    return {
+      'CH-Languages': 'en-US',
+      'CH-Locale': 'en_US',
+      'Accept': 'application/json',
+      'CH-AppBuild': API_BUILD_ID,
+      'CH-AppVersion': API_BUILD_VERSION,
+      'User-Agent': API_UA,
+      'CH-DeviceId': SharedPrefsController.deviceID,
+    };
+  }
 }

@@ -1,8 +1,9 @@
+import 'package:club_house_unofficial/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  static const routeName = '/extractArguments';
+  static const routeName = '/welcomeScreen';
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -24,7 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 new FlatButton(
                   child: new Text("Close"),
                   onPressed: () {
-                    prefs.setBool("show_warning_message", true);
+                    prefs.setBool("show_warning_message", false);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -93,7 +94,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(color: Color.fromRGBO(84, 118, 170, 1)),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushNamed(LoginScreen.routeName);
+                  },
                   child: Text(
                     "Sign in",
                     style: Theme.of(context)
