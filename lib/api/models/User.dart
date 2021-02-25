@@ -6,7 +6,7 @@ class User with ChangeNotifier {
   String photoUrl;
   String username;
   String authToken;
-  bool waitlisted;
+  bool isWaitlisted;
 
   // List<User> speakers;
   // List<User> followedBySpeaker;
@@ -19,7 +19,7 @@ class User with ChangeNotifier {
     this.authToken,
     this.photoUrl,
     this.username,
-    this.waitlisted,
+    this.isWaitlisted,
   });
 
   factory User.fromJson({@required Map<String, dynamic> json}) {
@@ -27,14 +27,10 @@ class User with ChangeNotifier {
       name: json['name'],
       authToken: json['auth_token'],
       photoUrl: json['photo_url'],
-      userId: int.tryParse(json['user_id']),
+      userId: int.parse(json['user_id'].toString()),
       username: json['username'],
-      waitlisted: json['waitlisted'],
+      isWaitlisted: json['is_waitlisted'],
     );
-  }
-
-  setProvider(json) {
-    return User.fromJson(json: json);
   }
 
   Map<String, dynamic> toJson() => {
@@ -43,21 +39,6 @@ class User with ChangeNotifier {
         'photo_url': photoUrl,
         'user_id': userId.toString(),
         'username': username,
-        'waitlisted': waitlisted
+        'is_waitlisted': isWaitlisted
       };
-
-  // loadData({source}) {
-  //   var data = jsonDecode(source);
-  //   try {
-  //     this.userId = int.parse(data['user_id']);
-  //   } catch (e) {
-  //     this.userId = data['user_id'];
-  //   }
-  //   // this.userId = int.parse(data['user_id']);
-  //   this.name = data['name'];
-  //   this.photoUrl = data['photo_url'];
-  //   this.username = data['username'];
-  //   this.authToken = data['user_token'];
-  //   this.deviceId = data['device_id'] ?? "";
-  // }
 }

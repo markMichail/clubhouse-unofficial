@@ -23,14 +23,15 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
         .verifyCode(_textEditingController.text)
         .then((response) {
       Navigator.of(context).pop();
-      print(response['success']);
       if (response['success']) {
-        Provider.of<User>(context, listen: false)
-            .setProvider(response['user_profile']);
-        print(Provider.of<User>(context, listen: false).photoUrl);
-        print(Provider.of<User>(context, listen: false).authToken);
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            HomeScreen.routeName, (Route<dynamic> route) => false);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => ChangeNotifierProvider.value(
+                value: User.fromJson(json: response['user_profile']),
+                child: HomeScreen(),
+              ),
+            ),
+            (Route<dynamic> route) => false);
       } else {
         showDialog(
           context: context,
@@ -55,7 +56,6 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
   Widget build(BuildContext context) {
     final ConfirmCodeScreenArguments args =
         ModalRoute.of(context).settings.arguments;
-    // print(args.phoneNumber);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

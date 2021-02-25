@@ -30,7 +30,6 @@ class CompletePhoneNumberAuth {
         data['user_profile']['auth_token'] = data['auth_token'];
         data['user_profile']['is_waitlisted'] = data['is_waitlisted'];
         SharedPreferences.getInstance().then((prefs) {
-          prefs.clear();
           User user = User.fromJson(json: data['user_profile']);
           SharedPrefsController.user = user;
           SharedPrefsController.write();
