@@ -39,13 +39,15 @@ class _ChannelHomeScreenWidgetState extends State<ChannelHomeScreenWidget> {
         );
       } else {
         if (CallScreen.engine != null) {
-          LeaveChannel(
-                  channel: widget.channel.channel,
-                  channelId: widget.channel.channelId)
-              .leave();
-          CallScreen.engine.leaveChannel();
-          CallScreen.engine.destroy();
-          CallScreen.engine = null;
+          try {
+            LeaveChannel(
+                    channel: widget.channel.channel,
+                    channelId: widget.channel.channelId)
+                .leave();
+            CallScreen.engine.leaveChannel();
+            CallScreen.engine.destroy();
+            CallScreen.engine = null;
+          } catch (e) {}
         }
         showLoadingDialog(context);
         JoinChannel(channel: widget.channel.channel).join().then((response) {

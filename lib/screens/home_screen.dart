@@ -1,6 +1,7 @@
 import 'package:club_house_unofficial/api/methods/GetChannels.dart';
 import 'package:club_house_unofficial/api/models/Channel.dart';
 import 'package:club_house_unofficial/api/models/User.dart';
+import 'package:club_house_unofficial/screens/profile_screen.dart';
 import 'package:club_house_unofficial/widgets/channel_home_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: const EdgeInsets.only(right: 15, top: 10),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProfileScreen(user: user),
+                ),
+              );
+            },
             child: SquircleUser(
               photoUrl: user.photoUrl,
               size: 40.0,

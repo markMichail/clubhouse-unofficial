@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 
 class SquircleUser extends StatelessWidget {
   final String name;
@@ -35,7 +36,7 @@ class SquircleUser extends StatelessWidget {
           shape: _SquircleBorder(),
           clipBehavior: Clip.hardEdge,
           child: Image.network(
-            photoUrl,
+            photoUrl ?? "",
             errorBuilder: (context, error, stackTrace) {
               return Icon(Icons.person);
             },
@@ -93,7 +94,17 @@ class SquircleUser extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             isModerator == true ? Icon(Icons.star_rate_rounded) : Container(),
-            Text(name.split(" ")[0]),
+            name.split(" ")[0].length > 15
+                ? SizedBox(
+                    width: 70,
+                    height: 20,
+                    child: Marquee(
+                      text: name.split(" ")[0],
+                      velocity: 30.0,
+                      blankSpace: 10,
+                    ),
+                  )
+                : Text(name.split(" ")[0]),
           ],
         )
       ],
@@ -140,7 +151,7 @@ class SquircleUser extends StatelessWidget {
           ),
         ),
         SizedBox(height: 4),
-        Text(name.split(" ")[0]),
+        FittedBox(child: Text(name.split(" ")[0])),
       ],
     );
   }

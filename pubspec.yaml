@@ -29,6 +29,7 @@ dependencies:
   flutter_sim_country_code: ^0.0.3
   http: null
   intl_phone_number_input: ^0.6.0
+  marquee: ^1.7.0
   permission_handler: ^5.1.0+2
   provider: ^4.3.3
   shared_preferences: ^0.5.12+4

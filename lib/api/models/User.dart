@@ -24,11 +24,11 @@ class User with ChangeNotifier {
 
   factory User.fromJson({@required Map<String, dynamic> json}) {
     return User(
-      name: json['name'],
-      authToken: json['auth_token'],
+      name: json['name'] ?? "",
+      authToken: json['auth_token'] ?? "",
       photoUrl: json['photo_url'],
       userId: int.parse(json['user_id'].toString()),
-      username: json['username'],
+      username: json['username'] ?? "",
       isWaitlisted: json['is_waitlisted'],
     );
   }

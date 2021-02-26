@@ -11,6 +11,7 @@ import 'package:club_house_unofficial/api/models/User.dart';
 import 'package:club_house_unofficial/api/sharedPrefsController.dart';
 import 'package:club_house_unofficial/widgets/squircle_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 
 class CallScreen extends StatefulWidget {
   static const routeName = '/callScreen';
@@ -120,13 +121,25 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.channel.topic == null ? "" : widget.channel.topic,
-          style: TextStyle(color: Colors.black),
-        ),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: IconThemeData(color: Colors.black),
+        title: widget.channel.topic != null
+            ? widget.channel.topic.length > 30
+                ? SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: AppBar().preferredSize.height,
+                    child: Marquee(
+                      scrollAxis: Axis.horizontal,
+                      text: widget.channel.topic,
+                      blankSpace: 20,
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                : Text(widget.channel.topic)
+            : Text(""),
       ),
       body: Column(
         children: [
