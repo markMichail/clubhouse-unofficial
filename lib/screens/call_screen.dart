@@ -1,14 +1,11 @@
-import 'dart:convert';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:club_house_unofficial/api/DataProvider.dart';
 import 'package:club_house_unofficial/api/keys.dart';
 import 'package:club_house_unofficial/api/methods/GetChannel.dart';
 import 'package:club_house_unofficial/api/methods/LeaveChannel.dart';
 import 'package:club_house_unofficial/api/models/Channel.dart';
 import 'package:club_house_unofficial/api/models/ChannelUser.dart';
-import 'package:club_house_unofficial/api/models/User.dart';
 import 'package:club_house_unofficial/api/sharedPrefsController.dart';
+import 'package:club_house_unofficial/screens/profile_screen.dart';
 import 'package:club_house_unofficial/widgets/squircle_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
@@ -171,50 +168,8 @@ class _CallScreenState extends State<CallScreen> {
                             [
                               for (ChannelUser speaker in dataJson['speakers'])
                                 mutedUserIds.contains(speaker.userId)
-                                    ? Container(
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            SquircleUser(
-                                              photoUrl: speaker.photoUrl == null
-                                                  ? "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=612x612&w=0&h=rvt5KGND3z8kfrHELplF9zmr8d6COZQ-1vYK9mvSxnc="
-                                                  : speaker.photoUrl,
-                                              isSpeaking:
-                                                  speaker.userId == speakerId
-                                                      ? true
-                                                      : false,
-                                              isModerator: speaker.isModerator,
-                                              name: speaker.name,
-                                              size: 90,
-                                            ),
-                                            Positioned(
-                                              top: 60,
-                                              left: 85,
-                                              child: ClipOval(
-                                                child: Material(
-                                                  color: Colors.white,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            4.0),
-                                                    child: Icon(Icons.mic_off),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    : SquircleUser(
-                                        photoUrl: speaker.photoUrl == null
-                                            ? "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=612x612&w=0&h=rvt5KGND3z8kfrHELplF9zmr8d6COZQ-1vYK9mvSxnc="
-                                            : speaker.photoUrl,
-                                        isSpeaking: speaker.userId == speakerId
-                                            ? true
-                                            : false,
-                                        name: speaker.name,
-                                        size: 90,
-                                      ),
+                                    ? mutedSpeaker(context, speaker)
+                                    : unMutedSpeaker(speaker),
                             ],
                           ),
                         ),
@@ -247,17 +202,7 @@ class _CallScreenState extends State<CallScreen> {
                             [
                               for (ChannelUser followedBySpeaker
                                   in dataJson['followedBySpeaker'])
-                                SquircleUser(
-                                  photoUrl: followedBySpeaker.photoUrl == null
-                                      ? "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=612x612&w=0&h=rvt5KGND3z8kfrHELplF9zmr8d6COZQ-1vYK9mvSxnc="
-                                      : followedBySpeaker.photoUrl,
-                                  isSpeaking:
-                                      followedBySpeaker.userId == speakerId
-                                          ? true
-                                          : false,
-                                  name: followedBySpeaker.name,
-                                  size: 65,
-                                ),
+                                followedBySpeakerUser(followedBySpeaker),
                             ],
                           ),
                         ),
@@ -289,15 +234,7 @@ class _CallScreenState extends State<CallScreen> {
                           delegate: SliverChildListDelegate(
                             [
                               for (ChannelUser other in dataJson['others'])
-                                SquircleUser(
-                                  photoUrl: other.photoUrl == null
-                                      ? "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=612x612&w=0&h=rvt5KGND3z8kfrHELplF9zmr8d6COZQ-1vYK9mvSxnc="
-                                      : other.photoUrl,
-                                  isSpeaking:
-                                      other.userId == speakerId ? true : false,
-                                  name: other.name,
-                                  size: 65,
-                                ),
+                                audience(context, other),
                             ],
                           ),
                         ),
@@ -311,6 +248,107 @@ class _CallScreenState extends State<CallScreen> {
           ),
           _buttomBar(context)
         ],
+      ),
+    );
+  }
+
+  InkWell audience(BuildContext context, ChannelUser other) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ProfileScreen(
+              channelUser: other,
+            ),
+          ),
+        );
+      },
+      child: SquircleUser(
+        photoUrl: other.photoUrl == null
+            ? "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=612x612&w=0&h=rvt5KGND3z8kfrHELplF9zmr8d6COZQ-1vYK9mvSxnc="
+            : other.photoUrl,
+        isSpeaking: other.userId == speakerId ? true : false,
+        name: other.name,
+        size: 65,
+      ),
+    );
+  }
+
+  InkWell followedBySpeakerUser(ChannelUser followedBySpeaker) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ProfileScreen(channelUser: followedBySpeaker),
+          ),
+        );
+      },
+      child: SquircleUser(
+        photoUrl: followedBySpeaker.photoUrl == null
+            ? "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=612x612&w=0&h=rvt5KGND3z8kfrHELplF9zmr8d6COZQ-1vYK9mvSxnc="
+            : followedBySpeaker.photoUrl,
+        isSpeaking: followedBySpeaker.userId == speakerId ? true : false,
+        name: followedBySpeaker.name,
+        size: 65,
+      ),
+    );
+  }
+
+  InkWell unMutedSpeaker(ChannelUser speaker) {
+    return InkWell(
+      onTap: () {
+        MaterialPageRoute(
+          builder: (_) => ProfileScreen(channelUser: speaker),
+        );
+      },
+      child: SquircleUser(
+        photoUrl: speaker.photoUrl == null
+            ? "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=612x612&w=0&h=rvt5KGND3z8kfrHELplF9zmr8d6COZQ-1vYK9mvSxnc="
+            : speaker.photoUrl,
+        isSpeaking: speaker.userId == speakerId ? true : false,
+        name: speaker.name,
+        size: 90,
+      ),
+    );
+  }
+
+  InkWell mutedSpeaker(BuildContext context, ChannelUser speaker) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ProfileScreen(channelUser: speaker),
+          ),
+        );
+      },
+      child: Container(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            SquircleUser(
+              photoUrl: speaker.photoUrl == null
+                  ? "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=612x612&w=0&h=rvt5KGND3z8kfrHELplF9zmr8d6COZQ-1vYK9mvSxnc="
+                  : speaker.photoUrl,
+              isSpeaking: speaker.userId == speakerId ? true : false,
+              isModerator: speaker.isModerator,
+              name: speaker.name,
+              size: 90,
+            ),
+            Positioned(
+              top: 60,
+              left: 85,
+              child: ClipOval(
+                child: Material(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Icon(Icons.mic_off),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

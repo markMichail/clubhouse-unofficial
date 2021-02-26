@@ -1,17 +1,16 @@
 import 'package:club_house_unofficial/api/sharedPrefsController.dart';
 import 'package:flutter/widgets.dart';
-import 'package:club_house_unofficial/api/models/User.dart';
 import 'package:club_house_unofficial/api/keys.dart';
 import 'package:http/http.dart' as http;
 
 class GetProfile {
-  User user;
-  GetProfile({@required this.user});
+  int userId;
+  GetProfile({@required this.userId});
 
   Future<String> getProfile() async {
     try {
       final response = await http.post(
-        "${API_URL}/get_profile",
+        "$API_URL/get_profile",
         headers: {
           'CH-Languages': 'en-US',
           'CH-Locale': 'en_US',
@@ -24,7 +23,7 @@ class GetProfile {
           'CH-UserID': SharedPrefsController.user.userId.toString(),
         },
         body: {
-          "user_id": user.userId.toString(),
+          "user_id": userId.toString(),
         },
       );
 

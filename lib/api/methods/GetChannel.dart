@@ -13,7 +13,7 @@ class GetChannel {
 
   Future<Map<String, dynamic>> exce() async {
     final response = await http.post(
-      "${API_URL}/get_channel",
+      "$API_URL/get_channel",
       headers: {
         'CH-Languages': 'en-US',
         'CH-Locale': 'en_US',

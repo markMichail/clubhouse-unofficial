@@ -9,20 +9,15 @@ class ProfileUser extends User {
   bool followsMe, isBlockedByNetwork;
   String timeCreated;
   User invitedByUserProfile;
-  // null = not following
-  // 2 = following
-  // other values = ?
   int notificationType;
 
   ProfileUser(json) {
-    print(json);
     var data = jsonDecode(json);
-    // print(data);
     userId = data['user_profile']['user_id'];
     photoUrl = data['user_profile']['photo_url'];
     name = data['user_profile']['name'];
     username = data['user_profile']['username'];
-    displayname = data['user_profile']['displayname'];
+    displayname = data['user_profile']['displayname'] ?? "";
     bio =
         data['user_profile']['bio'] == null ? "" : data['user_profile']['bio'];
     twitter = data['user_profile']['twitter'];

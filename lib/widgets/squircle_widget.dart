@@ -38,7 +38,12 @@ class SquircleUser extends StatelessWidget {
           child: Image.network(
             photoUrl ?? "",
             errorBuilder: (context, error, stackTrace) {
-              return Icon(Icons.person);
+              return Image.network(
+                photoUrl ?? "",
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.person);
+                },
+              );
             },
             fit: BoxFit.cover,
             loadingBuilder: (BuildContext context, Widget child,
@@ -73,6 +78,14 @@ class SquircleUser extends StatelessWidget {
               child: Image.network(
                 photoUrl,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.network(
+                    photoUrl ?? "",
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.person);
+                    },
+                  );
+                },
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent loadingProgress) {
                   if (loadingProgress == null) return child;
@@ -133,6 +146,14 @@ class SquircleUser extends StatelessWidget {
                 child: Image.network(
                   photoUrl,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.network(
+                      photoUrl ?? "",
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.person);
+                      },
+                    );
+                  },
                   loadingBuilder: (BuildContext context, Widget child,
                       ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) return child;
