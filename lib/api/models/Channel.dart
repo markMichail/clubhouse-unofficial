@@ -95,11 +95,9 @@ class Channel {
   });
 
   factory Channel.fromJson(Map<String, dynamic> json) {
-    print(json);
     List<dynamic> channelUsersJson = json["users"];
     List<ChannelUser> channelUsers = [];
     channelUsersJson.forEach((user) {
-      // print(user['name']);
       channelUsers.add(ChannelUser.fromJson(user));
     });
     return Channel(

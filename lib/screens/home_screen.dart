@@ -1,4 +1,3 @@
-import 'package:club_house_unofficial/api/keys.dart';
 import 'package:club_house_unofficial/api/methods/GetChannels.dart';
 import 'package:club_house_unofficial/api/models/Channel.dart';
 import 'package:club_house_unofficial/api/models/User.dart';
@@ -59,7 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.hasError)
             return errorWidget('Error: ${snapshot.error}');
           else if (snapshot.hasData) {
-            print(snapshot.data);
             if (snapshot.data['success']) {
               Map<String, dynamic> map =
                   Map<String, dynamic>.from(snapshot.data);
@@ -67,9 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
               channels = [];
               channelsJson.forEach((channel) {
                 channels.add(Channel.fromJson(channel));
-                // print(channels[0].users[0].isMuted);
               });
-              print("home_screen channels count: ${channels.length}");
+              //print("home_screen channels count: ${channels.length}");
               return RefreshIndicator(
                 onRefresh: () {
                   setState(() {
@@ -85,70 +82,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                   return data;
                 },
-                child: ListView.builder(
-                  itemCount: channels.length,
-                  itemBuilder: (context, index) {
-                    return ChannelHomeScreenWidget(channel: channels[index]);
-                    //   return Card(
-                    //     child: ListTile(
-                    //       onTap: () {
-                    //         // JoinChannel(user: user, channel: "xVl9KQVR")
-                    //         //     // channel: channels[index].channel)
-
-                    //         //     .exce()
-                    //         //     .then((resBody) {
-                    //         //   channels[index].token =
-                    //         //       jsonDecode(resBody)['token'];
-                    //         //   // print(jsonDecode(resBody)['token']);
-
-                    //         //   // Navigator.push(
-                    //         //   //   context,
-                    //         //   //   MaterialPageRoute(
-                    //         //   //     builder: (context) => ChannelScreen(
-                    //         //   //       channel: channels[index],
-                    //         //   //       role: ClientRole.Audience,
-                    //         //   //       userId: user.userId,
-                    //         //   //     ),
-                    //         //   //   ),
-                    //         //   // );
-
-                    //         //   Navigator.push(
-                    //         //     context,
-                    //         //     MaterialPageRoute(
-                    //         //       builder: (context) => CallPage(
-                    //         //         // channelName: channels[index].channel,
-                    //         //         channelName: "xVl9KQVR",
-                    //         //         role: ClientRole.Broadcaster,
-                    //         //         userId: user.userId,
-                    //         //         token: jsonDecode(resBody)['token'],
-                    //         //         channel: channels[index],
-                    //         //       ),
-                    //         //     ),
-                    //         //   );
-                    //         // });
-                    //       },
-                    //       // title: Text("1"),
-                    //       title: Text(channels[index].topic == null
-                    //           ? ""
-                    //           : channels[index].topic),
-                    //       subtitle: Column(
-                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                    //         children: [
-                    //           for (var i in channels[index].users) Text(i.name),
-                    //           Row(
-                    //             children: [
-                    //               Text(
-                    //                 channels[index].numAll.toString(),
-                    //               ),
-                    //               Icon(Icons.person),
-                    //               SizedBox(width: 20.0)
-                    //             ],
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   );
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount: channels.length,
+                    itemBuilder: (context, index) {
+                      return ChannelHomeScreenWidget(channel: channels[index]);
+                    },
+                  ),
                 ),
               );
             } else

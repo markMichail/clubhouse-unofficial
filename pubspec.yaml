@@ -23,10 +23,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  agora_rtc_engine: ^3.2.1
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
   flutter_sim_country_code: ^0.0.3
+  http: null
   intl_phone_number_input: ^0.6.0
+  permission_handler: ^5.1.0+2
   provider: ^4.3.3
   shared_preferences: ^0.5.12+4
   uuid: ^2.2.2

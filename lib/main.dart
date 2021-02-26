@@ -1,4 +1,5 @@
 import 'package:club_house_unofficial/api/sharedPrefsController.dart';
+import 'package:club_house_unofficial/screens/call_screen.dart';
 import 'package:club_house_unofficial/screens/confirm_code_screen.dart';
 import 'package:club_house_unofficial/screens/home_screen.dart';
 import 'package:club_house_unofficial/screens/login_screen.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Club House - unofficial',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Color.fromRGBO(241, 239, 228, 1),
       ),
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => LoginScreen(),
         ConfirmCodeScreen.routeName: (context) => ConfirmCodeScreen(),
         HomeScreen.routeName: (context) => HomeScreen(),
+        CallScreen.routeName: (context) => CallScreen(),
       },
     );
   }

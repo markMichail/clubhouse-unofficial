@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class SquircleUser extends StatelessWidget {
   final String name;
   final bool isSpeaking;
+  final bool isModerator;
   final String photoUrl;
   final double size;
 
   SquircleUser(
       {this.name,
       this.isSpeaking,
+      this.isModerator,
       @required this.photoUrl,
       @required this.size});
   @override
@@ -62,29 +64,38 @@ class SquircleUser extends StatelessWidget {
         Container(
           width: size,
           height: size,
-          child: Material(
-            shape: _SquircleBorder(),
-            clipBehavior: Clip.hardEdge,
-            child: Image.network(
-              photoUrl,
-              fit: BoxFit.cover,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes
-                        : null,
-                  ),
-                );
-              },
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Material(
+              shape: _SquircleBorder(),
+              clipBehavior: Clip.hardEdge,
+              child: Image.network(
+                photoUrl,
+                fit: BoxFit.cover,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes
+                          : null,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
         SizedBox(height: 4),
-        Text(name.split(" ")[0]),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            isModerator == true ? Icon(Icons.star_rate_rounded) : Container(),
+            Text(name.split(" ")[0]),
+          ],
+        )
       ],
     );
   }
@@ -99,12 +110,12 @@ class SquircleUser extends StatelessWidget {
             color: Colors.transparent,
             shape: _SquircleBorder(
               side: BorderSide(
-                color: Colors.blueGrey[800],
-                width: 3.0,
+                color: Colors.grey,
+                width: 4.0,
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(6.0),
               child: Material(
                 shape: _SquircleBorder(),
                 clipBehavior: Clip.hardEdge,
@@ -156,7 +167,6 @@ class _SquircleBorder extends ShapeBorder {
 
   @override
   Path getInnerPath(Rect rect, {TextDirection textDirection}) {
-    // print("c");
     return _squirclePath(rect.deflate(side.width), superRadius);
   }
 

@@ -1,12 +1,10 @@
 import 'dart:convert';
 
-import 'package:club_house_unofficial/api/models/User.dart';
 import 'package:club_house_unofficial/api/sharedPrefsController.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 const String TAG = "ClubhouseAPI";
-const bool DEBUG = true;
+const bool DEBUG = false;
 
 const String API_URL = "https://www.clubhouseapi.com/api";
 
