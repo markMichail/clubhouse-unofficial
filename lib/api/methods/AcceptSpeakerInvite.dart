@@ -24,8 +24,8 @@ class AcceptSpeakerInvite {
           'CH-UserID': SharedPrefsController.user.userId.toString(),
         },
         body: {
-          "channel": "xX3p3ovP",
-          // "channel": channel,
+          // "channel": "xX3p3ovP",
+          "channel": channel,
           "user_id": SharedPrefsController.user.userId.toString(),
         },
       );

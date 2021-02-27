@@ -25,8 +25,8 @@ class AudienceReply {
     //   'CH-UserID': SharedPrefsController.user.userId.toString(),
     // };
     var body = {
-      "channel": "xX3p3ovP",
-      // "channel": channel,
+      // "channel": "xX3p3ovP",
+      "channel": channel,
       "raise_hands": "true".toString(),
       "unraise_hands": "false".toString(),
     };
