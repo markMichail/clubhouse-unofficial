@@ -1,11 +1,20 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:club_house_unofficial/api/DataProvider.dart';
+import 'package:club_house_unofficial/api/keys.dart';
 import 'package:club_house_unofficial/api/methods/GetChannels.dart';
+import 'package:club_house_unofficial/api/methods/JoinChannel.dart';
+import 'package:club_house_unofficial/api/methods/LeaveChannel.dart';
 import 'package:club_house_unofficial/api/models/Channel.dart';
 import 'package:club_house_unofficial/api/models/User.dart';
+import 'package:club_house_unofficial/screens/call_screen.dart';
 import 'package:club_house_unofficial/screens/profile_screen.dart';
 import 'package:club_house_unofficial/widgets/channel_home_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:club_house_unofficial/widgets/squircle_widget.dart';
+import 'package:uni_links/uni_links.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/homeScreen';
@@ -17,6 +26,95 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<dynamic> data;
   User user;
   List<Channel> channels = List<Channel>();
+
+  StreamSubscription _sub;
+  @override
+  initState() {
+    super.initState();
+    print("homeee");
+    initPlatformState();
+  }
+
+  @override
+  dispose() {
+    if (_sub != null) _sub.cancel();
+    super.dispose();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    // Attach a listener to the links stream
+    _sub = getLinksStream().listen(
+      (String link) {
+        if (!mounted) return;
+        var _channel = link.substring(link.length - 8);
+        if (CallScreen.engine != null) {
+          try {
+            LeaveChannel(channel: _channel).leave();
+            CallScreen.engine?.leaveChannel();
+            CallScreen.engine?.destroy();
+            CallScreen.engine = null;
+          } catch (e) {}
+        }
+        showLoadingDialog(context);
+        JoinChannel(channel: _channel).join().then((response) {
+          if (response != null) {
+            Map<String, dynamic> _obj = jsonDecode(response);
+            var c = Channel.fromJson(_obj);
+            print(c.creatorUserProfileId);
+            print(c.token);
+            // widget.channel.token = _obj['token'];
+            DataProvider.saveChannel(c);
+            Navigator.of(context).pop();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CallScreen(
+                  channel: c,
+                ),
+              ),
+            );
+          } else {
+            Navigator.of(context).pop();
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text("Alert!"),
+                content: Text("Error in the link!"),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text("Close"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+        });
+      },
+      onError: (Object err) {
+        // SHOW DIALOG ERROR IN LINK
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Alert!"),
+            content: Text("Error in the link!"),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+        if (!mounted) return;
+      },
+    );
+  }
 
   List<Widget> appBarActions(user) => [
         Padding(

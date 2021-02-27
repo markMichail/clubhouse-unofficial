@@ -36,7 +36,12 @@ class GetChannel {
       List<ChannelUser> followedBySpeaker = [];
       List<ChannelUser> others = [];
       List users = jsonDecode(response.body)['users'];
+      ChannelUser me;
       users.forEach((user) {
+        if (user['user_id'].toString() ==
+            SharedPrefsController.user.userId.toString()) {
+          me = ChannelUser.fromJson(user);
+        }
         if (user['is_speaker']) {
           speakers.add(ChannelUser.fromJson(user));
         } else if (user['is_followed_by_speaker'])
@@ -44,7 +49,22 @@ class GetChannel {
         else
           others.add(ChannelUser.fromJson(user));
       });
+      if (me == null) {
+        me = ChannelUser(
+          isFollowedBySpeaker: false,
+          isInvitedAsSpeaker: false,
+          isModerator: false,
+          isMuted: true,
+          isNew: true,
+          isSpeaker: false,
+          name: SharedPrefsController.user.name,
+          photoUrl: SharedPrefsController.user.photoUrl,
+          userId: SharedPrefsController.user.userId,
+        );
+        users.add(me);
+      }
       return {
+        'me': me,
         'speakers': speakers,
         'followedBySpeaker': followedBySpeaker,
         'others': others

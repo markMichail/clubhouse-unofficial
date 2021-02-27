@@ -92,6 +92,7 @@ class Channel {
     this.numSpeakers,
     this.numAll,
     this.users,
+    this.token,
   });
 
   factory Channel.fromJson(Map<String, dynamic> json) {
@@ -114,6 +115,7 @@ class Channel {
       numSpeakers: json['num_speakers'],
       numAll: json['num_all'],
       users: channelUsers,
+      token: json['token'],
     );
   }
 

@@ -43,25 +43,28 @@ class _ChannelHomeScreenWidgetState extends State<ChannelHomeScreenWidget> {
                     channel: widget.channel.channel,
                     channelId: widget.channel.channelId)
                 .leave();
-            CallScreen.engine.leaveChannel();
-            CallScreen.engine.destroy();
+            CallScreen.engine?.leaveChannel();
+            CallScreen.engine?.destroy();
             CallScreen.engine = null;
           } catch (e) {}
         }
         showLoadingDialog(context);
         JoinChannel(channel: widget.channel.channel).join().then((response) {
-          Map<String, dynamic> _obj = jsonDecode(response);
-          widget.channel.token = _obj['token'];
-          DataProvider.saveChannel(widget.channel);
-          Navigator.of(context).pop();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CallScreen(
-                channel: widget.channel,
+          if (response != null) {
+            Map<String, dynamic> _obj = jsonDecode(response);
+            widget.channel.token = _obj['token'];
+            DataProvider.saveChannel(widget.channel);
+            Navigator.of(context).pop();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CallScreen(
+                  channel: widget.channel,
+                ),
               ),
-            ),
-          );
+            );
+          } else
+            Navigator.of(context).pop();
         });
       }
     }

@@ -20,7 +20,7 @@ class LeaveChannel {
       'CH-UserID': SharedPrefsController.user.userId.toString(),
     }, body: {
       "channel": channel,
-      "channel_id": channelId.toString(),
+      "channel_id": channelId != null ? "" : channelId.toString(),
     });
     if (response.statusCode == 200) {
       // var data = jsonDecode(response.body);
