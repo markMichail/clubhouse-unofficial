@@ -360,8 +360,10 @@ class _CallScreenState extends State<CallScreen> {
   Widget unMutedSpeaker(ChannelUser speaker) {
     return InkWell(
       onTap: () {
-        MaterialPageRoute(
-          builder: (_) => ProfileScreen(channelUser: speaker),
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ProfileScreen(channelUser: speaker),
+          ),
         );
       },
       child: SquircleUser(
